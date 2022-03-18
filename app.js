@@ -1,54 +1,22 @@
 const { rejects } = require('assert');
 const { resolve } = require('path');
-function split_string(information){
-    return information.split(" ")
-}
-function extract_device_address(info_arr){
-    
-    return info_arr[1]
-}
-function extract_function_code(info_arr){
-    
-    return info_arr[2]
-}
-function extract_number_of_bytes_further(information){
-    
-    return info_arr[3]
-}
+
 async function read_data_from_file(){
-    var jsondata=[];
     
     const lineReader = require('line-reader');
     
         try{
              lineReader.eachLine('com_h_R1.log', function(line) {
-               // console.log(line.indexOf("TX"));
-               // console.log(typeof line)
-               // components=line.split(" ")
-               // console.log(components)
+               
                if (line.indexOf("TX")!== -1){
                    tx_values=line.split(":")
-                   splited=split_string(tx_values[1]);
-                let Tx={TX:{DeviceType:"Master" ,
-                DeviceId:extract_device_address(splited),
-             Function_code:extract_function_code(splited),
-            }}
-            jsondata.push(Tx)      
-            
+                   TxMessages.push(tx_values[1])
                }
                else if (line.indexOf("RX")!== -1){
                    rx_values=line.split(":")
+                   RxMessages.push(rx_values[1])
                    
-                   splited=split_string(rx_values[1]);
-                let Rx={RX:{DeviceType:"Slave" ,
-                DeviceId:extract_device_address(splited),
-             Function_code:extract_function_code(splited),
-            }}
-                  jsondata.push(Rx)
-                   // console.log(rx_array)
-               }
-               else{
-                   // console.log("characters not found")
+            
                }
                
            });
@@ -57,28 +25,49 @@ async function read_data_from_file(){
            console.error(e)
        }
        await new Promise((resolve, reject)=>setTimeout(resolve, 1000))
-      
-    
-
-    // console.log(tx_array)
-    return jsondata;
+   
 }
-async function process_data(){
-    data=await read_data_from_file();
-    myRf=data["TX"]
-    data=JSON.stringify(data)
-    data=JSON.parse(data)
-    unique_slaves=[];
-    unique_master=[];
-    
-  
-    
-    // console.log("This is the tx arrays 1:", data);
-    
+
+async function get_unique_slave_addresses(){
+    if(RxMessages.length===0){
+        return false
+    }
+    else {
+        for (index=0;index<RxMessages.length;index++){
+            addresses=RxMessages[index].split(" ")
+            if(!slave_addresses.includes(addresses[1]) ){
+                slave_addresses.push(addresses[1])
+            }
+        }
+        
+    }
+    await new Promise((resolve)=>setTimeout(resolve, 1000))
 }
-process_data()
+async function extract_slave_info(){
+    let Messages=TxMessages
+    // console.log(Messages)
+if (slave_addresses.length!==0){
+    for (index=0;index<slave_addresses.length; index++){
+        for(messages=0;messages<Messages.length;messages){
+            if(Messages[messages].includes(slave_addresses[index])){
+                splitted=Messages[messages].split(" ")
+                console.log(splitted)
+Messages.splice(messages,1);
+messages--;
+            }
+        }
+    }
+}
 
-// var msg = 'Hello World';
-// console.log(msg);
-
-
+}
+async function main(){
+    globalThis.TxMessages=[];
+    globalThis.RxMessages=[];
+    globalThis.slave_addresses=[]
+    globalThis.slave_info=[]
+    await read_data_from_file();
+    await get_unique_slave_addresses();
+    await extract_slave_info()
+    console.log("This is the list of unique slave devices:", slave_addresses);
+}
+main();
