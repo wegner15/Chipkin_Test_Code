@@ -23,11 +23,19 @@ async function read_data_from_file(path, report_path) {
     console.error(e);
   }
   await new Promise((resolve, reject) => setTimeout(resolve, 1000));
-  head="===="
-  fs.appendFile(report_path, ("\n"+head.repeat(20)+"\n Number of Requests:"+TxMessages.length+
-  "\n Number of Responses:"+RxMessages.length), function (err) {
-    if (err) throw err;
-  });
+  head = "====";
+  fs.appendFile(
+    report_path,
+    "\n" +
+      head.repeat(20) +
+      "\n Number of Requests:" +
+      TxMessages.length +
+      "\n Number of Responses:" +
+      RxMessages.length,
+    function (err) {
+      if (err) throw err;
+    }
+  );
 }
 
 async function get_unique_slave_addresses(report_path) {
@@ -46,10 +54,14 @@ async function get_unique_slave_addresses(report_path) {
 async function extract_slave_info(report_path) {
   let Messages = TxMessages;
   // console.log(Messages)
-  head="===="
-  fs.appendFile(report_path, ("\n"+head.repeat(20)+"\n Request Information Per Slave: \n"), function (err) {
-    if (err) throw err;
-  });
+  head = "====";
+  fs.appendFile(
+    report_path,
+    "\n" + head.repeat(20) + "\n Request Information Per Slave: \n",
+    function (err) {
+      if (err) throw err;
+    }
+  );
   let device_info = [];
   globalThis.device_info_array = [];
   if (slave_addresses.length !== 0) {
@@ -76,11 +88,17 @@ async function extract_slave_info(report_path) {
       };
       //   console.log(devices)
       device_info_array.push(devices);
-      fs.appendFile(report_path, "\n SLAVE ADDRESS:"+
-      [parseInt(slave_addresses[index], 16)]+"\n"
-       +JSON.stringify(devices)+"\n", function (err) {
-        if (err) throw err;
-      });
+      fs.appendFile(
+        report_path,
+        "\n SLAVE ADDRESS:" +
+          [parseInt(slave_addresses[index], 16)] +
+          "\n" +
+          JSON.stringify(devices) +
+          "\n",
+        function (err) {
+          if (err) throw err;
+        }
+      );
     }
   }
   //   await new Promise((resolve, reject) => setTimeout(resolve, 1000));
@@ -91,12 +109,10 @@ async function convert_slave_addresses_to_int(report_path) {
   for (index = 0; index < slave_addresses.length; index++) {
     slave_addresses_in_int.push(parseInt(slave_addresses[index], 16));
   }
-  head="===="
+  head = "====";
   fs.appendFile(
     report_path,
-   "\n"+ head.repeat(20) +
-      "\n Slave Addresses: " +
-      slave_addresses_in_int,
+    "\n" + head.repeat(20) + "\n Slave Addresses: " + slave_addresses_in_int,
     function (err) {
       if (err) throw err;
       // console.log('Saved!');
@@ -104,20 +120,19 @@ async function convert_slave_addresses_to_int(report_path) {
   );
 }
 async function main() {
-    var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    var yyyy = today.getFullYear();
-    
-    report_filepath ="report-"+mm + '-' + dd + '-' + yyyy + '.txt';
-    
-    number=0
-    while(fs.existsSync(report_filepath)){
-        report_filepath="report-"+mm + '-' + dd + '-' + yyyy+'-'+number+ '.txt';
-        number++;
-    }
-    
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  var yyyy = today.getFullYear();
 
+  report_filepath = "report-" + mm + "-" + dd + "-" + yyyy + ".txt";
+
+  number = 0;
+  while (fs.existsSync(report_filepath)) {
+    report_filepath =
+      "report-" + mm + "-" + dd + "-" + yyyy + "-" + number + ".txt";
+    number++;
+  }
 
   globalThis.TxMessages = [];
   globalThis.RxMessages = [];
@@ -129,8 +144,5 @@ async function main() {
 
   await convert_slave_addresses_to_int(report_filepath);
   await extract_slave_info(report_filepath);
-
-  
-
 }
 main();
