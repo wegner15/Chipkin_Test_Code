@@ -1,0 +1,18 @@
+{
+    "name": "MQTT_to_TCP_Bridge",
+    "version": "0.1.0",
+    "description": "A bridge for MQTT and TCP for Modbus",
+    "main": "app.js",
+    "scripts": {
+      "start": "npx nodemon app.js"
+    },
+    "author": "Ayo Isaiah",
+    "license": "MIT",
+    "dependencies": {
+      "express": "^4.16.3",
+      "pug": "^2.0.3"
+    },
+    "devDependencies": {
+      "nodemon": "^1.19.0"
+    }
+  }

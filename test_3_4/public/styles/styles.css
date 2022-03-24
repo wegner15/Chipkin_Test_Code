@@ -1,0 +1,25 @@
+html,
+
+body{
+    color: rgb(20, 22, 21);
+    padding: auto;
+}
+h1{
+    color: blue;
+    padding-left: 0%;
+}
+.title{
+    color: rgb(4, 0, 255);
+    background-color: bisque;
+}
+.main_connection{
+    background-color: bisque;
+    border-radius: 10px;
+    border-width: 0px;
+    border-bottom-color: brown;
+    border-color: red;
+    border: 0px;
+    margin: 0px;
+    padding: 5px;
+
+}

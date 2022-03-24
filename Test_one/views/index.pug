@@ -1,0 +1,27 @@
+style
+    include ../public/styles/styles.css
+
+div.main_connection
+    h1=title
+    div(class='upload-form')
+        form(action='/result' method='post' class="form-horizontal" enctype='multipart/form-data')
+            div(class="form-group row")
+                label(for="file" class="control-label col-sm-6") Upload Log File
+                div(class="col-sm-6")
+                    input(type='file' id="file" name='file' class="file_control")
+                    button(type='submit' for="name" class='file_control') Upload
+
+div.maindisplay 
+    |Number of Requests:
+    label(for="Requests")=requests
+    |  Number of Responses:
+    label(for="Requests")=responses
+    form(action='/filter' method="post")
+        label(for='Slave_list') Pick Slave Device Below
+        select(name='dropDown', id='')
+            option=selection
+            if addresses!==undefined 
+                each slave in addresses
+                    option=slave
+            input(type='submit', value='Submit')
+block table

@@ -1,0 +1,27 @@
+{
+    "Requests":"430",
+    "Responses":"431",
+    "158":[
+        {"functioncode":"3",
+        "offset":"354",
+        "numberofregisters":"2"},
+        {"functioncode":"3",
+            "offset":"354",
+            "numberofregisters":"2"}],
+        "123":[
+                {"functioncode":"3",
+                "offset":"354",
+                "numberofregisters":"2"},
+                {"functioncode":"3",
+                    "offset":"354",
+                    "numberofregisters":"2"}],
+                    "127":[
+                        {"functioncode":"3",
+                        "offset":"354",
+                        "numberofregisters":"2"},
+                        {"functioncode":"3",
+                            "offset":"354",
+                            "numberofregisters":"2"}]
+        
+    
+}

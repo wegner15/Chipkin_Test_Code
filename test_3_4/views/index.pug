@@ -1,0 +1,64 @@
+//- link(rel='stylesheet', type='public/styles', href='/styles.css')
+style
+    include ../public/styles/styles.css
+
+mixin menu-button(text, action)
+    button.btn.btn-sm.m-1('(click)'=action)&attributes(attributes)= text
+
+
+
+div.main_connection
+    h1.title#main_title.important Mobus TCP slave and MQTT Simulator        
+    div.tcp_div
+        h2.tcp_setting TCP Settings    
+        form(class="TCP_setting" action="/tcp/connect" method="POST")
+            | IP Address: 
+            input(name='IP_Address', value='192.168', type='text')
+            |          Port: 
+            input(name='Port', value='502', type='text')
+            |          Data Address: 
+            input(name='Data_Address', value='400001', type='text')
+            input(class="connect" type="submit" value="connect")
+    div.mqtt_div
+        h2.MQTT_settings MQTT Settings
+        body    
+        form(class="MQTT_class" action="/mqtt/connect" method="POST")
+
+            #error 
+                if error 
+                    p.text-danger Error!
+            | Topic
+            input(name='mqtt_topic', value='my_data', type='text')
+            |          Client ID 
+            input(name='Client_id', value='mqttx_4702dd23', type='text')
+            |          Username 
+            input(name='username', value='Nashon', type='text')
+        
+            | Password 
+            input(name='Password', value='Niceone', type='password')
+            input(class="connect" type="submit" value="connect")
+                  
+
+div 
+    +menu-button('Connect TCP', 'saveItem()')(class="btn-outline-success")
+    +menu-button('Connect MQTT', 'updateItem()')(class="btn-outline-primary")
+    +menu-button('View Data', 'deleteItem()')(class="btn-outline-danger")
+   
+div 
+    div.commands 
+        h2.command_head Write Single Register
+        |Register Address 
+        input(name='Register_address', value='', type='text')
+        |Register Value
+        input(name='Register_value', value='', type='text')
+
+    div.commands 
+        h2.command_head Read Single Register
+    
+    div.commands 
+        h2.command_head Read Coil
+
+    div.commands 
+        h2.command_head Write Single Coil
+
+
