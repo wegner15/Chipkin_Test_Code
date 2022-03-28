@@ -1,14 +1,15 @@
-var modbus = require("modbus-stream");
+const net = require('net');
+const client = new net.Socket();
+const port = 7070;
+const host = '127.0.0.1';
 
-modbus.tcp.server({ debug: "server" }, (connection) => {
-    connection.writeSingleCoil({ address: 10, value: 8 }, (err, info) => {
-        console.log("response", info.response.data);
-    });
-}).listen(12345, () => {
-    modbus.tcp.connect(12345, { debug: "client" }, (err, connection) => {
-        connection.on("write-single-coil", (request, reply) => {
-            // console.log(request);
-            reply([1,2,3])
-        });
-    });
+client.connect(port, host, function() {
+    console.log('Connected');
+    client.write("Hello From Client " + client.address().address);
+});
+client.on('data', function(data) {
+    console.log('Server Says : ' + data);
+});
+client.on('close', function() {
+    console.log('Connection closed');
 });

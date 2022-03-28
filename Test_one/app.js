@@ -67,16 +67,37 @@ app.post('/filter', function (req, res) {
     });
     
   });
-app.post('/result', upload.single('file'),async (req, res) => {
+
+  app.post('/upload', upload.single('file'),async (req, res) => {
     console.log(req.file.path)
-    console.log("Generating retport")
-    res.render("loading",{
-            
+    console.log("Generating report")
+    res.render("loading")
+    // res.send("Working On It")
+    await report_generator.generate_report(req.file.path)
+  });
+app.get('/result', (req, res) => {
+    
+    const fs = require('fs');
+    fs.readFile('Header_report.json', (err, data) => {
+        if (err) throw err;
+        globalThis.header = JSON.parse(data);
+        // console.log(header);
+        unique_slaves=header.Unique_slaves
+        globalThis.requests=header.Requests
+        globalThis.responses=header.Responses
+        // res.end()
+        res.render("index",{
+            selection:"No selection",
+            addresses:unique_slaves,
+            requests:requests,
+            responses:responses,
+            title: 'Modbus Report'
     
         });
-    await report_generator.generate_report(req.file.path)
-    console.log("log after done")
-    res.redirect("/complete");
+        console.log("Rendered")
+    });
+
+    // res.redirect("/complete");
     
     
 //     while(generatingreport){
@@ -93,24 +114,7 @@ app.post('/result', upload.single('file'),async (req, res) => {
     // res.sendFile(__dirname + '/success.html');
 });
 app.get('/complete', function (req, res, next) {
-    const fs = require('fs');
-    fs.readFile('Header_report.json', (err, data) => {
-        if (err) throw err;
-        globalThis.header = JSON.parse(data);
-        // console.log(header);
-        unique_slaves=header.Unique_slaves
-        globalThis.requests=header.Requests
-        globalThis.responses=header.Responses
-        // res.end()
-        res.status(200).render("index",{
-            selection:"No selection",
-            addresses:unique_slaves,
-            requests:requests,
-            responses:responses,
-            title: 'Modbus Report'
     
-        });
-    });
   });
 app.use(function (req, res, next) {
   next(createError(404));

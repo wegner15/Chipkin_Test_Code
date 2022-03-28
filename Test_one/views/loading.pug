@@ -1,6 +1,35 @@
 style
         include ../public/styles/loading.css
-.loader
-  .inner.one
-  .inner.two
-  .inner.three
+.container
+  h2 Processing
+  .progress
+        #progress
+        #bar
+        p#loading.text
+
+// read document
+a.doc(class="button" target='_blank' href='/result') View Report
+script. 
+        const progressBar = document.getElementById("bar");
+        const loadingMsg = document.getElementById("loading");
+        let barWidth = 0;
+
+        const animate = () => {
+        barWidth++;
+        progressBar.style.width = `${barWidth}%`;
+        setTimeout(() => {
+        //- loadingMsg.innerHTML = `${barWidth}% Completed`;
+        }, 101);
+        };
+
+        // animation starts 2 seconds after page load
+        setTimeout(() => {
+        let intervalID = setInterval(() => {
+        if (barWidth === 95) {
+        loadingMsg.innerHTML = `Success!`;
+        } else {
+        animate();
+        }
+        }, 100); //this sets the speed of the animation
+        }, 2000);
+
